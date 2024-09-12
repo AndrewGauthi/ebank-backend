@@ -1,5 +1,6 @@
 package org.sid.bankingbakend_v1.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class Customer {
     private String email;
 
     @OneToMany (mappedBy = "customer")
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private List<BankAccount> bankAccounts;
 
 }
