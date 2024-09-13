@@ -2,7 +2,7 @@ package org.sid.bankingbakend_v1.Services;
 
 
 import org.sid.bankingbakend_v1.exeption.BalanceNotSufficientException;
-import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundExcetion;
+import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundException;
 import org.sid.bankingbakend_v1.exeption.CustomerNotFoundExcetion;
 import org.sid.bankingbakend_v1.model.*;
 
@@ -23,16 +23,16 @@ public interface BankAccountService {
     List<Customer> listCustomer();
 
     // consuler un compte
-    BankAccount getBankAccount(String customerId) throws BankAccountNotFoundExcetion;
+    BankAccount getBankAccount(String customerId) throws BankAccountNotFoundException;
 
     // realiser un debit sur un compte
-    void debit(String accountId, double amount, String description) throws BankAccountNotFoundExcetion, BalanceNotSufficientException;
+    void debit(String accountId, double amount, String description) throws BalanceNotSufficientException, BankAccountNotFoundException, BalanceNotSufficientException;
 
     // realiser un Cebit sur un compte
-    void credit(String accountId, double amount, String description) throws BankAccountNotFoundExcetion, BalanceNotSufficientException;
+    void credit(String accountId, double amount, String description) throws  BalanceNotSufficientException, BankAccountNotFoundException;
 
     // Vrirement
-    void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundExcetion, BalanceNotSufficientException;
+    void transfer(String accountIdSource, String accountIdDestination, double amount) throws  BalanceNotSufficientException, BankAccountNotFoundException;
 
     // pour consulter afficher la liste de tous les comptes
     List<BankAccount> listBankAccount();

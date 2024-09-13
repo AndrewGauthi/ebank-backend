@@ -1,23 +1,16 @@
 package org.sid.bankingbakend_v1;
 
 import org.sid.bankingbakend_v1.Services.BankAccountService;
-import org.sid.bankingbakend_v1.enums.AccountStatus;
-import org.sid.bankingbakend_v1.enums.OperationType;
 import org.sid.bankingbakend_v1.exeption.BalanceNotSufficientException;
-import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundExcetion;
+import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundException;
 import org.sid.bankingbakend_v1.exeption.CustomerNotFoundExcetion;
 import org.sid.bankingbakend_v1.model.*;
-import org.sid.bankingbakend_v1.repository.AccountOperationRepository;
-import org.sid.bankingbakend_v1.repository.BankAccountRepository;
-import org.sid.bankingbakend_v1.repository.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Stream;
 
 @SpringBootApplication
@@ -119,7 +112,7 @@ public class BankingBakendV1Application {
                        //pour chaque clien on cree des opreration debit
                        bankAccountService.debit(bankAccount.getId(),Math.random()*9000,"Debit");
 
-                   } catch (BankAccountNotFoundExcetion | BalanceNotSufficientException e) {
+                   } catch (BankAccountNotFoundException | BalanceNotSufficientException e) {
                        throw new RuntimeException(e);
                    }
                }

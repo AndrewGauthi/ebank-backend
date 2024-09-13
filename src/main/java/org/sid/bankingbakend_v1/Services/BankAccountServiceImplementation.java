@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sid.bankingbakend_v1.enums.OperationType;
 import org.sid.bankingbakend_v1.exeption.BalanceNotSufficientException;
-import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundExcetion;
+import org.sid.bankingbakend_v1.exeption.BankAccountNotFoundException;
 import org.sid.bankingbakend_v1.exeption.CustomerNotFoundExcetion;
 import org.sid.bankingbakend_v1.model.*;
 import org.sid.bankingbakend_v1.repository.AccountOperationRepository;
@@ -79,21 +79,21 @@ public class BankAccountServiceImplementation implements BankAccountService{
 
     // consuler un compte
     @Override
-    public BankAccount getBankAccount(String customerId) throws BankAccountNotFoundExcetion {
+    public BankAccount getBankAccount(String customerId) throws BankAccountNotFoundException {
        /* BankAccount bankAccount=bankAccountRepository.findById(customerId).orElse(null);
         if (bankAccount == null)
             throw new BankAccountNotFoundExcetion("BanKAccount not found");*/
         BankAccount bankAccount=bankAccountRepository.findById(customerId)
-                .orElseThrow(()->new BankAccountNotFoundExcetion("BanKAccount not found"));
+                .orElseThrow(()->new BankAccountNotFoundException("BanKAccount not found"));
         return bankAccount;
     }
 
     // realiser un debit sur un compte
     @Override
-    public void debit(String accountId, double amount, String description) throws BankAccountNotFoundExcetion, BalanceNotSufficientException {
+    public void debit(String accountId, double amount, String description) throws BankAccountNotFoundException, BalanceNotSufficientException {
         //recher bankAccount par id si il n'existe pas exeption
         BankAccount bankAccount=bankAccountRepository.findById(accountId)
-                .orElseThrow(()->new BankAccountNotFoundExcetion("BanKAccount not found"));
+                .orElseThrow(()->new BankAccountNotFoundException("BanKAccount not found"));
         //test si il y a sufisament d'argent
         if (bankAccount.getBalance()<amount)
             throw new BalanceNotSufficientException("Balance not sufficient");
@@ -113,10 +113,10 @@ public class BankAccountServiceImplementation implements BankAccountService{
 
     // realiser un Cebit sur un compte
     @Override
-    public void credit(String accountId, double amount, String description) throws BankAccountNotFoundExcetion, BalanceNotSufficientException {
+    public void credit(String accountId, double amount, String description) throws  BankAccountNotFoundException {
         //recher bankAccount par id si il n'existe pas exeption
         BankAccount bankAccount= bankAccountRepository.findById(accountId)
-                .orElseThrow(()->new BankAccountNotFoundExcetion("BankAccount not found"));
+                .orElseThrow(()->new BankAccountNotFoundException("BankAccount not found"));
         //ecrit l'operation
         AccountOperation accountOperation =new AccountOperation();
         accountOperation.setType(OperationType.CREDIT);
@@ -132,7 +132,7 @@ public class BankAccountServiceImplementation implements BankAccountService{
 
     // Vrirement
     @Override
-    public void transfer(String accountIdSource, String accountIdDestination, double amount) throws BankAccountNotFoundExcetion, BalanceNotSufficientException {
+    public void transfer(String accountIdSource, String accountIdDestination, double amount) throws BalanceNotSufficientException, BankAccountNotFoundException {
         debit(accountIdSource, amount, "Transfer to"+accountIdDestination);
         credit(accountIdDestination,amount,"tranfer from"+accountIdSource);
     }
